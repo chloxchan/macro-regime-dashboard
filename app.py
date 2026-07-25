@@ -81,7 +81,10 @@ st.subheader("S&P 500 Colored by Macro Regime")
 spx = yf.download("^GSPC", start="1998-12-01", auto_adjust=True, progress=False)["Close"]
 spx_m = spx.resample("ME").last()
 spx_m.index = spx_m.index.to_period("M").to_timestamp()
-spx_aligned = spx_m.reindex(macro_m.index).ffill()
+
+macro_index_normalized = macro_m.index.to_period("M").to_timestamp()
+spx_aligned = spx_m.reindex(macro_index_normalized).ffill()
+spx_aligned.index = macro_m.index
 
 regime_colors = {"Goldilocks": "#2CA02C", "Reflation": "#1F77B4", "Stagflation": "#D62728", "Deflationary Slowdown": "#7F7F7F"}
 fig1 = go.Figure()
